@@ -89,7 +89,16 @@ function Allweather (cityWeather,weatherData){
     }
 }
    
-   
+
+
+/////////////////////////////create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+app.get('*',(Request,Response)=>{
+
+    
+    Response.status(500).send('Page Not Found')
+
+})
 
 
 
