@@ -27,14 +27,36 @@ const PORT = process.env.PORT || PORT
 /////////////////////lestining to the port\\\\\\\\\\\\\\\\\\\\
 
 app.listen(PORT, ()=>{
+    
     console.log(`Listening to port ${PORT}`);
     
 })
 
-/////////////////////sending a respond\\\\\\\\\\\\\\\\\\\\\\
+/////////////////////sending a respond for test\\\\\\\\\\\\\\\\\\\\\\
 
-app.get('/',(Request,Response)=>{
+// app.get('/',(Request,Response)=>{
 
-    Response.status(200).send('hello')
+//     Response.status(200).send('hello')
+// })
+
+//////////////////////////
+
+app.get('/location',(Request,Response)=>{
+
+    const geoData = require('./data/geo.json');
+    const city = Request.query.city;
+    const newLocation = new AllLocation(city,geoData)
+    Response.send(newLocation)
+
 })
 
+///////////////A constructor crating an objects of cities\\\\\\\\\\\\\\\
+
+function AllLocation (city,geoData){
+    
+    this.search_query = city;
+    this.search_query = 'Washington',
+    this.display_name = geoData[0].display_name,
+    this.latitude = geoData[0].lat,
+    this.longitude = geoData[0].lon
+}
