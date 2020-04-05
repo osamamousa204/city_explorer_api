@@ -32,14 +32,8 @@ app.listen(PORT, ()=>{
     
 })
 
-/////////////////////sending a respond for test\\\\\\\\\\\\\\\\\\\\\\
 
-// app.get('/',(Request,Response)=>{
-
-//     Response.status(200).send('hello')
-// })
-
-//////////////////////////
+/////////////////////////////create a location route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.get('/location',(Request,Response)=>{
 
@@ -50,13 +44,53 @@ app.get('/location',(Request,Response)=>{
 
 })
 
-///////////////A constructor crating an objects of cities\\\\\\\\\\\\\\\
+/////////A constructor crating an objects of cities locations\\\\\\\\\\\
 
 function AllLocation (city,geoData){
-    
+
     this.search_query = city;
     this.search_query = 'Washington',
     this.display_name = geoData[0].display_name,
     this.latitude = geoData[0].lat,
     this.longitude = geoData[0].lon
 }
+
+
+
+
+
+///////////////////////////////////create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+let arrWeather = [];
+
+app.get('/weather',(Request,Response)=>{
+
+    const weatherData = require('./data/weather.json');
+    const cityWeather = Request.query.city;
+    arrWeather = [];
+    const newWeather = new Allweather(cityWeather,weatherData)
+    Response.send(arrWeather)
+
+})
+
+///////////////A constructor crating an objects of weathers\\\\\\\\\\\\\\\
+
+function Allweather (cityWeather,weatherData){
+    
+    this.search_query = cityWeather;
+    
+    for(let i = 0 ; i < weatherData.data.length  ;i++){
+
+        this.forecast = weatherData.data[i].weather.description,
+
+        this.time = weatherData.data[i].valid_date
+
+        arrWeather.push(this)
+    }
+}
+   
+   
+
+
+
+    
