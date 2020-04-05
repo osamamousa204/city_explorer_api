@@ -68,11 +68,8 @@ app.get('/weather', (Request, Response) => {
     const weatherData = require('./data/weather.json');
     const cityWeather = Request.query.city;
     arrWeather = [];
-
     weatherData.data.forEach(val => {
-
         new Allweather(val)
-
     });
     Response.send(arrWeather)
 
@@ -81,7 +78,6 @@ app.get('/weather', (Request, Response) => {
 ///////////////A constructor crating an objects of weathers\\\\\\\\\\\\\\\
 
 function Allweather(val) {
-
     this.forecast = val.weather.description,
     this.time = val.valid_date
     arrWeather.push(this)
