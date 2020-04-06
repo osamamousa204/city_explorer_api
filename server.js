@@ -1,30 +1,34 @@
 'use strict';
-/////////////////get the express function\\\\\\\\\\\\\\\\\\
+////////get the express function\\\\\\\\\
 
 const express = require('express')
 
-/////////////////get the cors functions\\\\\\\\\\\\\\\\\
+///////get the cors functions\\\\\\\\\\\
 
 const cors = require('cors')
 
-/////////////////get the dotenv function\\\\\\\\\\\\\\\
+//////get the dotenv function\\\\\\\\\\\\
 
 require('dotenv').config();
 
-/////////////////calling the express finction\\\\\\\\\\\\\\\\\\
+//////get the superagent function\\\\\\\\\\\\
+
+const superagent = require('superagent')
+
+////////calling the express finction\\\\\
 
 const app = express();
 
-////////////////calling cors function\\\\\\\\\\\\\\\
+/////////calling cors function\\\\\\\\\\\
 
 app.use(cors());
 
-///////////////creat a port number\\\\\\\\\\\\\\\
+//////////creat a port number\\\\\\\\\\\\
 
 const PORT = process.env.PORT || PORT
 
 
-/////////////////////lestining to the port\\\\\\\\\\\\\\\\\\\\
+/////////lestining to the port\\\\\\\\\\\\
 
 app.listen(PORT, () => {
 
@@ -33,59 +37,98 @@ app.listen(PORT, () => {
 })
 
 
-/////////////////////////////create a location route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////create a location route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-app.get('/location', (Request, Response) => {
+//creating a finction to get the route and using the locationHandler as callbackfunctin\\
 
-    const geoData = require('./data/geo.json');
+app.get('/location', locationHandler)
+
+
+
+////////creating the locationHandler\\\\\\\\
+function locationHandler(Request, Response) {
     const city = Request.query.city;
-    const newLocation = new AllLocation(city, geoData)
-    Response.send(newLocation)
+   getlocation(city)
+        .then((newLocation) => {
+            Response.status(200).json(newLocation)
+        })
+}
 
-})
+
+/////creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+function getlocation(city) {
+    const KEY = process.env.GEOCODE_API_KEY;
+    // const URL = `GET https://eu1.locationiq.com/v1/search.php?key=${KEY}&q=${city}&format=json`;
+    const URL = `GET https://us1.locationiq.com/v1/search.php?key=${KEY}&q=${city}&format=json`;
+    console.log('dddddddddddddddd', URL);
+
+    return superagent.get(URL)
+        .then((geoData) => {
+            const newLocation = new AllLocation(city, geoData.body);
+            return newLocation
+
+        });
+
+}
+
 
 /////////A constructor crating an objects of cities locations\\\\\\\\\\\
 
 function AllLocation(city, geoData) {
-
     this.search_query = city;
-    this.search_query = 'Washington',
-        this.display_name = geoData[0].display_name,
-        this.latitude = geoData[0].lat,
-        this.longitude = geoData[0].lon
+    this.display_name = geoData[0].display_name;
+    this.latitude = geoData[0].lat;
+    this.longitude = geoData[0].lon;
 }
 
-
-
-
-
-///////////////////////////////////create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
+///////////////////////////////////////////create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 let arrWeather = [];
+//creating a finction to get the route and using the weatherHandler as callbackfunctin\\
 
-app.get('/weather', (Request, Response) => {
+app.get('/weather', weatherHandler)
 
-    const weatherData = require('./data/weather.json');
-    const cityWeather = Request.query.city;
-    arrWeather = [];
-    arrWeather = weatherData.data.map(val => {
-      return  new Allweather(val)
-    });
-    Response.send(arrWeather)
 
-})
 
-///////////////A constructor crating an objects of weathers\\\\\\\\\\\\\\\
+////////creating the locationHandler\\\\\\\\
+
+function weatherHandler(Request, Response) {
+    const city = Request.query.search_query;
+    getWeather(city)
+        .then(arrWeather => {
+            Response.status(200).json(arrWeather)
+        })
+}
+
+/////creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+
+function getWeather(city) {
+    const KEY = process.env.WEATHER_API_KEY;
+    const URL = `https://api.weatherbit.io/v2.0/forecast/daily?city=${city}&key=${KEY}`;
+    console.log('dddddddddddddddd', URL);
+
+    return superagent.get(URL)
+        .then(weatherData => {
+            arrWeather = [];
+            arrWeather = weatherData.body.data.map(val => {
+                return new Allweather(val)
+            });
+            return arrWeather
+        })
+
+}
+
+/////////A constructor crating an objects of cities locations\\\\\\\\\\\
 
 function Allweather(val) {
     this.forecast = val.weather.description,
-    this.time = val.valid_date
-    
+        this.time = this.time = new Date(val.valid_date).toString().slice(0, 15);
+
 }
 
-///this.time = new date (val.valid_date)
 
-/////////////////////////////create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+////////////////////////////////////////create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.get('*', (Request, Response) => {
 
