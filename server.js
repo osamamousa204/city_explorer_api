@@ -1,4 +1,5 @@
 'use strict';
+
 ////////get the express function\\\\\\\\\
 
 const express = require('express')
@@ -37,15 +38,16 @@ app.listen(PORT, () => {
 })
 
 
-///////////////////////////////////////////create a location route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////(1)create a location route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-//creating a finction to get the route and using the locationHandler as callbackfunctin\\
+//(1-1)creating a finction to get the route and using the locationHandler as callbackfunctin\\
 
 app.get('/location', locationHandler)
 
 
 
-////////creating the locationHandler\\\\\\\\
+////////(1-2)creating the locationHandler\\\\\\\\
+
 function locationHandler(Request, Response) {
     const city = Request.query.city;
     getlocation(city)
@@ -55,7 +57,8 @@ function locationHandler(Request, Response) {
 }
 
 
-/////creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+/////(1-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+
 function getlocation(city) {
     const KEY = process.env.GEOCODE_API_KEY;
     const URL = `https://us1.locationiq.com/v1/search.php?key=${KEY}&q=${city}&format=json`;
@@ -69,7 +72,8 @@ function getlocation(city) {
 }
 
 
-/////////A constructor crating an objects of cities locations\\\\\\\\\\\
+/////////(1-4)A constructor crating an objects of cities locations\\\\\\\\\\\
+
 var lat ;
 var lon ;
 function AllLocation(city, geoData) {
@@ -81,15 +85,17 @@ function AllLocation(city, geoData) {
     lon = this.longitude = geoData[0].lon;
 }
 
-///////////////////////////////////////////create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////(2)create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 let arrWeather = [];
-//creating a finction to get the route and using the weatherHandler as callbackfunctin\\
+
+//(2-1)creating a finction to get the route and using the weatherHandler as callbackfunctin\\
 
 app.get('/weather', weatherHandler)
 
 
 
-////////creating the locationHandler\\\\\\\\
+////////(2-2)creating the weatherHandler\\\\\\\\
 
 function weatherHandler(Request, Response) {
     const city = Request.query.search_query;
@@ -99,7 +105,7 @@ function weatherHandler(Request, Response) {
         })
 }
 
-/////creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+/////(2-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
 
 function getWeather(city) {
     const KEY = process.env.WEATHER_API_KEY;
@@ -114,7 +120,7 @@ function getWeather(city) {
         })
 }
 
-/////////A constructor crating an objects of cities locations\\\\\\\\\\\
+/////////(2-4)A constructor crating an objects of cities weather\\\\\\\\\\\
 
 function Allweather(val) {
     this.forecast = val.weather.description;
@@ -122,15 +128,17 @@ function Allweather(val) {
 
 }
 
-///////////////////////////////////////////create a trail route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////////////////////////////////////(3)create a trail route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 let arrTeail = [];
-//creating a finction to get the route and using the trailrHandler as callbackfunctin\\
+
+//(3-1)creating a finction to get the route and using the trailrHandler as callbackfunctin\\
 
 app.get('/trails', trailHandler)
 
 
 
-////////creating the locationHandler\\\\\\\\
+////////(3-2)creating the locationHandler\\\\\\\\
 
 function trailHandler(Request, Response) {
     const city = Request.query.search_query;
@@ -140,14 +148,11 @@ function trailHandler(Request, Response) {
         })
 }
 
-/////creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
+/////(3-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
 
 function getTrail(city) {
     const KEY = process.env.TRAIL_API_KEY;
     const URL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=10&key=${KEY}`;
-    console.log( 'urllllllllllll', URL);
-    console.log( 'laaaan', lat);
-    console.log( 'looon', lon);
     return superagent.get(URL)
         .then(trailData => {
             arrTeail = [];
@@ -161,7 +166,7 @@ function getTrail(city) {
 
 }
 
-/////////A constructor crating an objects of cities locations\\\\\\\\\\\
+/////////(3-4)A constructor crating an objects of cities trails\\\\\\\\\\\
 
 function Alltrails(val) {   
         this.name = val.name;
@@ -171,14 +176,14 @@ function Alltrails(val) {
         this.star_votes = val.starVotes;
         this.summary = val.summary;
         this.trail_url = val.url;
-        this.conditions = val.conditionStatus;
+        this.conditions = val.conditionDetails;
         this.condition_date = val.conditionDate.toString().slice(0 , 9);
         this.condition_time = val.conditionDate.toString().slice(11 , 8);
 }
 
 
 
-////////////////////////////////////////create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////////////////////(5)create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 app.get('*', (Request, Response) => {
 
