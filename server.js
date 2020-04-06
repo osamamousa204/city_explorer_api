@@ -68,8 +68,8 @@ app.get('/weather', (Request, Response) => {
     const weatherData = require('./data/weather.json');
     const cityWeather = Request.query.city;
     arrWeather = [];
-    weatherData.data.forEach(val => {
-        new Allweather(val)
+    arrWeather = weatherData.data.map(val => {
+      return  new Allweather(val)
     });
     Response.send(arrWeather)
 
@@ -80,10 +80,10 @@ app.get('/weather', (Request, Response) => {
 function Allweather(val) {
     this.forecast = val.weather.description,
     this.time = val.valid_date
-    arrWeather.push(this)
+    
 }
 
-
+///this.time = new date (val.valid_date)
 
 /////////////////////////////create an error route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
