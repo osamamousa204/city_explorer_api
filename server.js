@@ -98,7 +98,7 @@ app.get('/weather', weatherHandler)
 ////////(2-2)creating the weatherHandler\\\\\\\\
 
 function weatherHandler(Request, Response) {
-    const city = Request.query.search_query;
+    const city = Request.query.city;
     getWeather(city)
         .then(arrWeather => {
             Response.status(200).json(arrWeather)
@@ -178,7 +178,7 @@ function Alltrails(val) {
         this.trail_url = val.url;
         this.conditions = val.conditionDetails;
         this.condition_date = val.conditionDate.toString().slice(0 , 9);
-        this.condition_time = val.conditionDate.toString().slice(11 , 8);
+        this.condition_time = val.conditionDate.toString().slice(11);
 }
 
 
