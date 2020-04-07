@@ -74,15 +74,15 @@ function getlocation(city) {
 
 /////////(1-4)A constructor crating an objects of cities locations\\\\\\\\\\\
 
-var lat ;
-var lon ;
+// var lat ;
+// var lon ;
 function AllLocation(city, geoData) {
     this.city = city;
     this.display_name = geoData[0].display_name;
     this.latitude = geoData[0].lat;
     this.longitude = geoData[0].lon;
-    lat = this.latitude = geoData[0].lat;
-    lon = this.longitude = geoData[0].lon;
+    // lat = this.latitude;
+    // lon = this.longitude ;
 }
 
 ///////////////////////////////////////////(2)create a weather route\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -141,8 +141,9 @@ app.get('/trails', trailHandler)
 ////////(3-2)creating the locationHandler\\\\\\\\
 
 function trailHandler(Request, Response) {
-    const city = Request.query.search_query;
-    getTrail(city)
+    const lat = Request.query.latitude;
+    const lon = Request.query.longitude;
+    getTrail(lat,lon)
         .then(arrTeail => {
             Response.status(200).json(arrTeail)
         })
@@ -150,9 +151,9 @@ function trailHandler(Request, Response) {
 
 /////(3-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
 
-function getTrail(city) {
+function getTrail(lat,lon) {
     const KEY = process.env.TRAIL_API_KEY;
-    const URL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=10&key=${KEY}`;
+    const URL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=500&key=${KEY}`;
     return superagent.get(URL)
         .then(trailData => {
             arrTeail = [];
