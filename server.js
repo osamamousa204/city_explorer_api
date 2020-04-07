@@ -141,7 +141,7 @@ app.get('/trails', trailHandler)
 ////////(3-2)creating the locationHandler\\\\\\\\
 
 function trailHandler(Request, Response) {
-    const city = Request.query.search_query;
+    const city = Request.query.city;
     getTrail(city)
         .then(arrTeail => {
             Response.status(200).json(arrTeail)
@@ -149,7 +149,7 @@ function trailHandler(Request, Response) {
 }
 
 /////(3-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" \\\\\\
-
+//maxDistance=10
 function getTrail(city) {
     const KEY = process.env.TRAIL_API_KEY;
     const URL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${lon}&maxDistance=10&key=${KEY}`;
