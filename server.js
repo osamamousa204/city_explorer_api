@@ -76,7 +76,7 @@ function checkLocation (request,response){
               let lng = newLocation.longitude;
               let safeValues = [cty,foQuery,lat,lng];
               let SQL = 'INSERT INTO locations (search_query,formatted_query,latitude,longitude) VALUES ($1,$2,$3,$4);';
-              client.query(SQL,safeValues)
+            return  client.query(SQL,safeValues)
                 .then(result2 => {
                   response.status(200).json(result2.rows[0]);
                 })
