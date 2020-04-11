@@ -2,7 +2,6 @@ let arrWeather = [];
 
 const helper = require('./depen')
 
-////////(2-2)creating the weatherHandler\\\\\\\\
 
 //================((2-2)creating the weatherHandler===============\\
 

@@ -4,6 +4,7 @@ const helper = require('./depen')
 
 ////////(4-2)creating the moviesHandler\\\\\\\\
 
+
 function moviesHandler(request, response) {
     let city = request.query.search_query;
     getMovieData(city)
@@ -18,7 +19,7 @@ function getMovieData(city) {
 
     const key = process.env.MOVIE_API_KEY;
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${key}&query=${city}`;
-    console.log(url);
+   
     return helper.superagent.get(url)
         .then(moviesData => {
             let moviesArray = moviesData.body.results.map((value) => {
