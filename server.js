@@ -57,7 +57,9 @@ helper.app.get('/movies', moviesHandler);
 
 //==================(5)create a yelp route=================\\
 
-// server.get('/yelp',yelpHandler);
+const yelpHandler = require('./yelp.js')
+
+helper.app.get('/yelp',yelpHandler);
 
 
 //**************************************************************************************************\\
@@ -79,7 +81,7 @@ helper.app.get('/movies', moviesHandler);
 helper.app.get('*', (Request, Response) => {
 
 
-    Response.status(500).send('Page Not Found')
+    Response.status(404).send('Page Not Found')
 
 })
 

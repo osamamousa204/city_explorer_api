@@ -4,6 +4,7 @@ const helper = require('./depen')
 
 //=====(1-2)creating the checkLocation=========\\
 
+
 function checkLocation(request, response) {
     const city = request.query.city;
     let sql = `SELECT * FROM locations WHERE search_query = '${city}';`;
@@ -30,7 +31,7 @@ function checkLocation(request, response) {
         })
 }
 
-//====(1-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the calling" =====\\
+//====(1-3)creating a finction to return  the data as a promise function "so i have to retrive these data using the promise way which is the then after calling the finction" =====\\
 
 function getlocation(city) {
     const KEY = process.env.GEOCODE_API_KEY;

@@ -3,6 +3,7 @@ const helper = require('./depen')
 
 ////////(3-2)creating the trailHandler\\\\\\\\
 
+
 function trailHandler(Request, Response) {
     const lat = Request.query.latitude;
     const lon = Request.query.longitude;
@@ -21,7 +22,7 @@ function getTrail(lat, lon) {
         .then(trailData => {
             arrTeail = [];
             arrTeail = trailData.body.trails.map(val => {
-                console.log(val);
+                
                 return new Alltrails(val)
 
             });
